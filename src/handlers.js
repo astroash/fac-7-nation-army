@@ -90,20 +90,16 @@ const handleLogout = (request, response) => {
 };
 
 const handleAuth = (request, cb) => {
-  if (!request.headers.cookie) return cb(true, false, {});
+  if (!request.headers.cookie) return cb({ isValid:false });
 
   const { jwt } = parse(request.headers.cookie);
 
-  if (!jwt) return cb(true, false, {});
+  if (!jwt) return cb({ isValid:false });
   return verify(jwt, SECRET, (err, jwt) => {
     if (err) {
-      cb(err, false, {});
+      cb({ isValid:false });
     } else {
-      cb(null, true, {
-        isValid: true
-        faccer: jwt.faccer,
-        avatar: jwt.avatar,
-      });
+      cb(null, {isValid: true, faccer: jwt.faccer, avatar: jwt.avatar });
     }
   });
 };
@@ -116,7 +112,7 @@ const handleError = (request, response) => {
 
 
 const handleHome = (request, response) => {
-  handleAuth(request, (err, res, obj) => {
+  handleAuth(request, (err, obj) => {
     if (err) {
       updateIndex(false, obj, (err, res) => {
         response.writeHead(200, 'Content-Type:text/html');
