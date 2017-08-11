@@ -13,7 +13,6 @@ const router = (request, response) => {
       case 'POST /logout':
         return handlers.handleLogout(request, response);
       case 'POST /post-comment':
-        console.log('hi');
         return handlers.handlePost(request, response);
       default:
         if (fileList.includes(request.url)) {

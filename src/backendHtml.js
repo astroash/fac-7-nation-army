@@ -77,10 +77,10 @@ const replaceHTML = (replacementLogin, replacementComments, cb) => {
 };
 
 
-const updateIndex = (verify, userInfo, cb) => {
+const updateIndex = (userInfo, cb) => {
   getPosts((error, result) => {
     if (error) return console.log(error);
-    if (!verify) {
+    if (!userInfo.isValid) {
       parseCommentSQL(result, (err, responseParsed) => {
         addLoginBox((err, responseLogin) => {
           replaceHTML(responseLogin, responseParsed, (err, res) => {
