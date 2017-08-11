@@ -15,15 +15,14 @@ const parseCommentSQL = (data, cb) => {
   let replacement = '<!-- display comments here -->\n<section class = "display-comments">\n';
 
   data.forEach((e) => {
-    replacement += '<button id="all-comments"> \n<span>\n<img src="';
-    replacement += e.avatar;
-    replacement += '" alt="User Avatar">\n<p class="all-comments__avatar">';
-    replacement += e.faccer;
-    replacement += '</p>\n<article>';
-    replacement += e.post;
-    replacement += '</article>\n<p  class="all-comments__date">';
-    replacement += e.date;
-    replacement += '\n</p>\n</span>\n</button>\n';
+    replacement += `'<button id="all-comments">
+    <span>
+    <img src="${e.avatar}" alt="User Avatar">
+    <p class="all-comments__avatar">${e.faccer}</p>
+    </span>
+    <article> ${e.post} </article>
+    <p class="all-comments__date"> ${e.date} </p>
+    </button>`;
   });
 
   replacement += '</section>\n<!-- end of comments -->';
