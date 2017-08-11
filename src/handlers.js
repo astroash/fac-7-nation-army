@@ -147,7 +147,6 @@ module.exports = {
   handlePublic,
   handleLogin,
   handleLogout,
-  handleAuth,
   handleError,
   handlePost,
 };
