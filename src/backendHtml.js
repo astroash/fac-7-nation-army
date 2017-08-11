@@ -52,9 +52,9 @@ const addLoginBox = (cb) => {
 const addUserInfo = (data, cb) => {
   let replacement = '<!-- log in header -->\n<header class="header">\n<img src="';
   replacement += data.avatar;
-  replacement += '" alt="Avatar"><p>Welcome ';
+  replacement += '" alt="Avatar"><p class="header__welcome">Welcome ';
   replacement += data.faccer;
-  replacement += '   <form id ="login" method="POST" action="/logout">\n';
+  replacement += '   <form id ="logout" method="POST" action="/logout">\n';
   replacement += '     <p class="invisible" id="logoutWarning">Don\'t forget to logout when you\'re done :)!</p>\n';
   replacement += '     <button type="submit" name="submit-logout" value="Log Out" >Log Out</button>\n';
   replacement += '   </form>\n';

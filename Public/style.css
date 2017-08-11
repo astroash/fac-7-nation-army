@@ -16,13 +16,22 @@ body {
 .header{
   background-color: #63A46C;
   padding: 1%;
+  height:45px;
 }
 
 .header img{
+  display: inline;
   height: 50px;
   width: 50px;
 }
-
+.header__welcome{
+  margin: 0 auto;
+  display: inline;
+}
+#logout{
+  float: right;
+  display: inline;
+}
 .post-comment form {
     width: 70vw;
     margin: 5vh auto;
@@ -44,8 +53,11 @@ body {
 }
 
 .post-comment__submit{
+  display: block;
   box-sizing: border-box;
-  margin: auto;
+  border: 2px darkslategrey solid;
+  border-radius: 5px;
+  margin:5px auto;
   width: 50%;
 }
 

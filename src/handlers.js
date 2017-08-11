@@ -20,20 +20,6 @@ const querystring = require('querystring');
 const SECRET = process.env.SECRET;
 const notFoundPage = '<p style="font-size: 10vh; text-align: center;">404!</p>';
 
-// const handleHome = (request, response) => {
-//   readFile(`${__dirname}/../Public/index.html`, (error, file) => {
-//     if (error) {
-//       response.writeHead(500, 'Content-Type:text/html');
-//       return response.end('<h1>Sorry, our homepage is sleeping</h1>');
-//     }
-//     console.log('hone');
-//     response.writeHead(200, {
-//       'Content-Type': 'text/html',
-//     });
-//     return response.end(file);
-//   });
-// };
-
 const handlePublic = (request, response) => {
   const fileName = request.url;
   const filePath = path.join(__dirname, '..', 'public', fileName);
@@ -131,9 +117,7 @@ const handleLogout = (request, response) => {
 const handleAuth = (request, cb) => {
   if (!request.headers.cookie) return cb(true, false, {});
 
-  const {
-    jwt,
-  } = parse(request.headers.cookie);
+  const { jwt } = parse(request.headers.cookie);
 
   if (!jwt) return cb(true, false, {});
   return verify(jwt, SECRET, (err, jwt) => {
@@ -154,8 +138,7 @@ const handleError = (request, response) => {
       'Content-Type': 'text/html',
       // What does this do?
       'Content-Length': notFoundPage.length,
-    },
-  );
+    });
   return response.end(notFoundPage);
 };
 
