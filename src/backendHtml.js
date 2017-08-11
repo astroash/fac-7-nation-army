@@ -15,15 +15,14 @@ const parseCommentSQL = (data, cb) => {
   let replacement = '<!-- display comments here -->\n<section class = "display-comments">\n';
 
   data.forEach((e) => {
-    replacement += '<button id="all-comments"> \n<span>\n<img src="';
-    replacement += e.avatar;
-    replacement += '" alt="User Avatar">\n<p class="all-comments__avatar">';
-    replacement += e.faccer;
-    replacement += '</p>\n<article>';
-    replacement += e.post;
-    replacement += '</article>\n<p  class="all-comments__date">';
-    replacement += e.date;
-    replacement += '\n</p>\n</span>\n</button>\n';
+    replacement += `'<button id="all-comments">
+    <span>
+    <img src="${e.avatar}" alt="User Avatar">
+    <p class="all-comments__avatar">${e.faccer}</p>
+    </span>
+    <article> ${e.post} </article>
+    <p class="all-comments__date"> ${e.date} </p>
+    </button>`;
   });
 
   replacement += '</section>\n<!-- end of comments -->';
@@ -32,36 +31,35 @@ const parseCommentSQL = (data, cb) => {
 };
 
 const addLoginBox = (cb) => {
-  let replacement = '<!-- log in header -->\n';
-  replacement += ' <header class="header">\n';
-  replacement += '   <form id ="login" method="POST" action="/login">\n';
-  replacement += '     <label for="username">Username:</label>\n';
-  replacement += '     <input id="username" name="username" type="text">\n';
-  replacement += '     <label for="password">Password:</label>\n';
-  replacement += '     <input id="password" name="password" type="password">\n';
-  replacement += '     <p class="invisible" id="loginWarning">Don\'t forget to write your login information!</p>\n';
-  replacement += '     <button type="submit" name="submit-login" value="Log In" >Submit</button>\n';
-  replacement += '   </form>\n';
-  replacement += ' </header>\n';
-  replacement += '<!-- end of log in header -->';
+  let replacement = `<!-- log in header -->
+  <header class="header">
+  <form id ="login" method="POST" action="/login">
+  <label for="username">Username:</label>
+  <input id="username" name="username" type="text">
+  <label for="password">Password:</label>
+  <input id="password" name="password" type="password">
+  <p class="invisible" id="loginWarning">Don\'t forget to write your login information!</p>
+  <button type="submit" name="submit-login" value="Log In" >Submit</button>
+  </form></header>
+  <!-- end of log in header -->`;
 
   cb(null, replacement);
 };
 
 
 const addUserInfo = (data, cb) => {
-  let replacement = '<!-- log in header -->\n<header class="header">\n<img src="';
-  replacement += data.avatar;
-  replacement += '" alt="Avatar"><p class="header__welcome">Welcome ';
-  replacement += data.faccer;
-  replacement += '   <form id ="logout" method="POST" action="/logout">\n';
-  replacement += '     <p class="invisible" id="logoutWarning">Don\'t forget to logout when you\'re done :)!</p>\n';
-  replacement += '     <button type="submit" name="submit-logout" value="Log Out" >Log Out</button>\n';
-  replacement += '   </form>\n';
-  replacement += '</p>\n</header>\n';
-  replacement += '<!-- end of log in header -->';
+  let userInfoHtml = `<!-- log in header -->
+  <header class="header">
+  <img src="${data.avatar}" alt="Avatar">
+  <p class="header__welcome">Welcome ${data.faccer}
+  <form id ="logout" method="POST" action="/logout">
+  <p class="invisible" id="logoutWarning">Don\'t forget to logout when you\'re done :)!</p>
+  <button type="submit" name="submit-logout" value="Log Out" >Log Out</button>
+  </form>
+  </header>
+  <!-- end of log in header -->`;
 
-  cb(null, replacement);
+  cb(null, userInfoHtml);
 };
 
 const replaceHTML = (replacementLogin, replacementComments, cb) => {
