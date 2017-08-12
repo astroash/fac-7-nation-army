@@ -3,15 +3,12 @@ const databaseConnection = require('../database/db_connection.js');
 
 const getPosts = (cb) => {
   databaseConnection.query('SELECT users.faccer, users.avatar, posts.post, posts.date FROM users INNER JOIN posts ON users.id = posts.user_id;', (err, res) => {
-    if (err) {
-      cb(err);
-    } else {
-      cb(null, res.rows);
-    }
+    if (err) cb(err);
+    else cb(null, res.rows);
   });
 };
 
-const parseCommentSQL = (data, cb) => {
+const buildHtmlFromQueryData = (data) => {
   let replacement = '<!-- display comments here -->\n<section class = "display-comments">\n';
 
   data.forEach((e) => {
@@ -27,10 +24,10 @@ const parseCommentSQL = (data, cb) => {
 
   replacement += '</section>\n<!-- end of comments -->';
 
-  cb(null, replacement);
+  return  replacement;
 };
 
-const addLoginBox = (cb) => {
+const addLoginBox = () => {
   let replacement = `<!-- log in header -->
   <header class="header">
   <form id ="login" method="POST" action="/login">
@@ -43,11 +40,11 @@ const addLoginBox = (cb) => {
   </form></header>
   <!-- end of log in header -->`;
 
-  cb(null, replacement);
+  return replacement;
 };
 
 
-const addUserInfo = (data, cb) => {
+const addUserInfo = (data) => {
   let userInfoHtml = `<!-- log in header -->
   <header class="header">
   <img src="${data.avatar}" alt="Avatar">
@@ -59,8 +56,16 @@ const addUserInfo = (data, cb) => {
   </header>
   <!-- end of log in header -->`;
 
-  cb(null, userInfoHtml);
+  return userInfoHtml;
 };
+
+const addCorrectHeader=  (boolean, data) =>{
+  if (boolean){
+    return addUserInfo(data)
+  } else {
+    return addLoginBox()
+  }
+}
 
 const replaceHTML = (replacementLogin, replacementComments, cb) => {
   fs.readFile(`${__dirname}/../Public/index.html`, 'utf8', (err, data) => {
@@ -74,29 +79,15 @@ const replaceHTML = (replacementLogin, replacementComments, cb) => {
   });
 };
 
-
 const updateIndex = (userInfo, cb) => {
-  getPosts((error, result) => {
-    if (error) return console.log(error);
-    if (!userInfo.isValid) {
-      parseCommentSQL(result, (err, responseParsed) => {
-        addLoginBox((err, responseLogin) => {
-          replaceHTML(responseLogin, responseParsed, (err, res) => {
-            cb(null, res);
-          });
-        });
-      });
-    } else {
-      parseCommentSQL(result, (err, responseParsed) => {
-        addUserInfo(userInfo, (err, responseLogin) => {
-          replaceHTML(responseLogin, responseParsed, (err, res) => {
-            cb(null, res);
-          });
-        });
-      });
-    }
-  });
-};
+  getPosts((err, data) => {
+    if (err) return console.log(error);
+    const htmlHeader = addCorrectHeader(userInfo.isValid, data);
+    const htmlFromDb = buildHtmlFromQueryData(data);
+    replaceHTML(htmlHeader, htmlFromDb, (err, res) => {
+      cb(null, res);
+    })
+  })
+}
 
-
-module.exports = { updateIndex, getPosts, replaceHTML, parseCommentSQL, addUserInfo, addLoginBox };
+module.exports = { updateIndex };
