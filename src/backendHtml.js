@@ -59,13 +59,11 @@ const addUserInfo = (data) => {
   return userInfoHtml;
 };
 
-const addCorrectHeader=  (boolean, data) =>{
-  if (boolean){
-    return addUserInfo(data)
-  } else {
-    return addLoginBox()
-  }
-}
+const addCorrectHeader = (boolean, data) => {
+  console.log(data);
+  if (boolean) return addUserInfo(data);
+  return addLoginBox();
+};
 
 const replaceHTML = (replacementLogin, replacementComments, cb) => {
   fs.readFile(`${__dirname}/../Public/index.html`, 'utf8', (err, data) => {
@@ -82,7 +80,7 @@ const replaceHTML = (replacementLogin, replacementComments, cb) => {
 const updateIndex = (userInfo, cb) => {
   getPosts((err, data) => {
     if (err) return console.log(error);
-    const htmlHeader = addCorrectHeader(userInfo.isValid, data);
+    const htmlHeader = addCorrectHeader(userInfo.isValid, userInfo);
     const htmlFromDb = buildHtmlFromQueryData(data);
     replaceHTML(htmlHeader, htmlFromDb, (err, res) => {
       cb(null, res);
