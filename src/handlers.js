@@ -114,12 +114,12 @@ const handleError = (request, response) => {
 const handleHome = (request, response) => {
   handleAuth(request, (err, obj) => {
     if (err) {
-      updateIndex(false, obj, (err, res) => {
+      updateIndex({isValid:false}, (err, res) => {
         response.writeHead(200, 'Content-Type:text/html');
         response.end(res);
       });
     } else {
-      updateIndex(true, obj, (err, res) => {
+      updateIndex(obj, (err, res) => {
         response.writeHead(200, 'Content-Type:text/html');
         response.end(res);
       });
