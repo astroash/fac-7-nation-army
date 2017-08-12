@@ -1,5 +1,4 @@
 const {readFile} = require('fs');
-const {parse} = require('cookie');
 const {sign, verify, decode} = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const env = require('env2')('.env');
@@ -9,6 +8,7 @@ const querystring = require('querystring');
 const getHashFromDB = require('./password-query');
 const { updateIndex } = require('./backendHtml.js');
 const postData = require('./post.js');
+const verifyCookie = require('./cookies')
 
 const SECRET = process.env.SECRET;
 const notFoundPage = '<p style="font-size: 10vh; text-align: center;">404!</p>';
@@ -89,21 +89,6 @@ const handleLogout = (request, response) => {
   return response.end();
 };
 
-const handleAuth = (request, cb) => {
-  if (!request.headers.cookie) return cb({ isValid:false });
-
-  const { jwt } = parse(request.headers.cookie);
-
-  if (!jwt) return cb({ isValid:false });
-  return verify(jwt, SECRET, (err, jwt) => {
-    if (err) {
-      cb({ isValid:false });
-    } else {
-      cb(null, {isValid: true, faccer: jwt.faccer, avatar: jwt.avatar });
-    }
-  });
-};
-
 const handleError = (request, response) => {
   response.writeHead(
     404, {'Content-Type': 'text/html', 'Content-Length': notFoundPage.length});
@@ -112,7 +97,7 @@ const handleError = (request, response) => {
 
 
 const handleHome = (request, response) => {
-  handleAuth(request, (err, obj) => {
+  verifyCookie(request, (err, obj) => {
     if (err) {
       updateIndex({isValid:false}, (err, res) => {
         response.writeHead(200, 'Content-Type:text/html');
