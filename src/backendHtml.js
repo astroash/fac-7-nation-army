@@ -12,7 +12,7 @@ const buildHtmlFromQueryData = (data) => {
   let replacement = '<!-- display comments here -->\n<section class = "display-comments">\n';
 
   data.forEach((e) => {
-    replacement += `'<button id="all-comments">
+    replacement += `<button id="all-comments">
     <span>
     <img src="${e.avatar}" alt="User Avatar">
     <p class="all-comments__avatar">${e.faccer}</p>
@@ -60,7 +60,6 @@ const addUserInfo = (data) => {
 };
 
 const addCorrectHeader = (boolean, data) => {
-  console.log(data);
   if (boolean) return addUserInfo(data);
   return addLoginBox();
 };
@@ -88,4 +87,4 @@ const updateIndex = (userInfo, cb) => {
   })
 }
 
-module.exports = { updateIndex };
+module.exports = updateIndex;
